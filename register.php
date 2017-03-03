@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 
 <html lang="en">
@@ -13,7 +16,12 @@
 
 <body>
 
+<!-- TODO: Gem data selvom der er errors i formen så brugeren ikke skal gentaste information -->
+
 <div class="container">
+    <div class="errors">
+
+    </div>
   <form id="contact" action="RegisterClass.php" method="post">
     <h3>Welcome to this shit</h3>
     <h4>Create a user here</h4>

@@ -1,4 +1,5 @@
 <?php
+
 include ('ValidationFunctions.php');
 // Instantiet Class ValidateFunctions.php som er inkluderet ovenfor^
 $validate_functions = new ValidateFunctions();
@@ -12,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
 
     //Validate navn er mindst 2 bogstaver lang
     if ($validate_functions->check_string_length($name, 2)) {
-      $errors['name'] = "Come on dude..";
+      $errors['name'] = ValidateFunctions::ERROR_NAME_LENGTH;
     }
     //
     if(!$validate_functions->contains_only_letters($name)){
@@ -37,8 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
     if (!is_numeric($phone)){
       $errors['phone'] = "only numbers";
     }
-    // TODO: Gøre så den er præcis 8 tal lang
+    elseif(!$validate_functions->check_number_length($phone, 8)){
+      $errors['phone'] = ValidateFunctions::ERROR_PHONE_CONTAINS_NUMBERS;
+    }
   }
+
   if (isset($_POST['password']))
   {
     $password = $_POST['password'];
@@ -48,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
   {
     $password2 = $_POST['password2'];
   }
-
+  //TODO: Hash Password
   //Checker om password matcher og at den er mindst 4
   if(isset($password, $password2)) {
     if($password != $password2){
-      $errors['password'] = "Password dont match";
+      $errors['password'] = ValidateFunctions::ERROR_PASSWORD_DONT_MATCH;
     } else if(strlen($password) <4) {
-     $errors['password'] = "Password needs atleast 4";
+      $errors['password'] = ValidateFunctions::ERROR_PASSWORD_LENGTH;
     }
   }
 
@@ -63,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
     //Validater om den er udfyldt - Kan kun gøres hvis man hacker koden
     $dropdown = $_POST['dropdown'];
     if(!in_array($dropdown, $allow_dropdown)){
-      $errors["dropdown"] = "hacker!";
+      $errors['dropdown'] = ValidateFunctions::ERROR_DROPDOWN;
     }
   }
 
@@ -71,11 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
   {
     $textarea = $_POST['textarea'];
   }
-//Tjekker om der er fejl og bruger foreach til at printe nøglerne der er fejl ved og gør det til uppercase
-  if(!empty($errors)){
-    foreach ($errors as $key => $error){
-      echo "<strong>" . strtoupper($key)  . "</strong>" . $error . "<br/>";
-    }
+  if(!empty($errors)) {
+    $validate_functions->error_handling($errors);
+    header('Location: register.php');
   }
 
 }
