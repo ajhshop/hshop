@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST)){
     $name = $_POST['name'];
 
     //Validate navn er mindst 2 bogstaver lang
-    if (strlen($name) <= 2) {
+    if ($validate_functions->check_string_length($name, 2)) {
       $errors['name'] = "Come on dude..";
     }
     //

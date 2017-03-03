@@ -18,5 +18,15 @@ class ValidateFunctions
     }
 
   }
-  
+  /*
+   * Dette er en shorthand if else statement som checker om den givne strengs $string længde
+   * er mindre eller lign. den givne længde $lenght
+   */
+  public function check_string_length($string, $length)
+  {
+    if (is_string($string) && is_int($length)) {
+     $result = (strlen($string) <= $length) ? true : false;
+    }
+    return $result;
+  }
 }
